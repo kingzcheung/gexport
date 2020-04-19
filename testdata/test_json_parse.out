@@ -1,0 +1,12 @@
+type Root struct {
+	Rewardable bool   `json:"rewardable"`
+	Zfq        string `json:"zfq"`
+	Setting    struct {
+		Description   string `json:"description"`
+		DefaultAmount int    `json:"default_amount"`
+	} `json:"setting"`
+	TotalRewardsCount int `json:"total_rewards_count"`
+	RewardBuyers      []struct {
+		Foo string `json:"foo"`
+	} `json:"reward_buyers"`
+}
