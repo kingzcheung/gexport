@@ -1,5 +1,7 @@
 #  gexport json/sql 转换struct 工具
 
+根据 json/sql 手写 struct 是很痛苦的事情，通过 `gexport` 可快速生成 go struct，并且支持 `gorm` 标签
+
 ### 下载
 
 ```bash
