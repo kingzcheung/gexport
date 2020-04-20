@@ -1,11 +1,11 @@
-package _examples
+package main
 
 import (
 	"fmt"
 	"github.com/kingzcheung/gexport"
 )
 
-func Example() {
+func example() {
 
 	sql := `CREATE TABLE gd_goods_record (
   id int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -22,5 +22,9 @@ func Example() {
 
 	gx := gexport.New(sql, "sql")
 
-	fmt.Println(gx.Parse().String())
+	fmt.Println(gx.Parse().Output())
+}
+
+func main() {
+	example()
 }

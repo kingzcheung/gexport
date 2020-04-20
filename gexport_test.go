@@ -3,6 +3,7 @@ package gexport
 import (
 	"fmt"
 	_ "github.com/kingzcheung/gexport/driver"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
@@ -21,4 +22,12 @@ func TestGexport_String(t *testing.T) {
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品物流，事件记录表';`
 	r := New(sql).String()
 	fmt.Println(r)
+}
+
+func TestGexport_Parse(t *testing.T) {
+	as := assert.New(t)
+	sql := `this is a test`
+	r := New(sql).Parse()
+
+	as.Equal(r.Error() != nil, true)
 }

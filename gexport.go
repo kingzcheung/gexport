@@ -46,6 +46,7 @@ func (g *Gexport) newParser(t ExportType) {
 func (g *Gexport) Parse() *Gexport {
 	g.parser.SetStructName(g.StructName)
 	g.output, g.err = g.parser.Parse(g.raw)
+
 	return g
 }
 

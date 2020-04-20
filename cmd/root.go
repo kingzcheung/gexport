@@ -38,7 +38,7 @@ func rootRun(cmd *cobra.Command, args []string) {
 	gx.StructName = name
 	gx.Parse()
 	if gx.Error() != nil {
-		log.Fatalln(err)
+		log.Fatalln("数据解析错误！")
 	}
 
 	output := gx.Output()
