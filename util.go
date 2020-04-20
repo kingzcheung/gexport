@@ -2,16 +2,8 @@ package gexport
 
 import (
 	"bytes"
-	"github.com/tidwall/gjson"
 	"strings"
 )
-
-//IsJson 判断是否是json
-func IsJson(str string) bool {
-	result := gjson.Parse(str)
-
-	return result.Exists()
-}
 
 //NameCamelCase 转换为驼峰命名
 func NameCamelCase(str string) string {

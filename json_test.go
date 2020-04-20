@@ -79,18 +79,6 @@ func TestJson_Parse(t *testing.T) {
 
 func TestJson_dimensionalReduction(t *testing.T) {
 	input, err := ioutil.ReadFile("testdata/data.json")
-	input = []byte(`{
-    "rewardable": true,
-    "zfq": "zfq",
-    "setting": {
-        "description": "this is desc",
-        "default_amount": 200
-    },
-    "total_rewards_count": 0,
-    "reward_buyers": [
-      {"foo":"bar"}
-    ]
-}`)
 	as := assert.New(t)
 	if err != nil {
 		as.Error(err)

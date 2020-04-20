@@ -3,6 +3,7 @@ package gexport
 import (
 	"bytes"
 	"fmt"
+	"sort"
 )
 
 var DefaultStructName = "RootGeneratedName"
@@ -42,18 +43,28 @@ func (g *GoStruct) Field(name string, fileType string, tags ...Tag) {
 		for _, tag := range tags {
 			g.buf.WriteString(tag.Name)
 			g.buf.WriteString(":")
-			for _, field := range tag.Fields {
-				for key, val := range field {
-					g.buf.WriteString("\"")
-					g.buf.WriteString(key)
-					if val != "" {
-						g.buf.WriteString(":")
-						g.buf.WriteString(val)
-					}
-					g.buf.WriteString("\"")
-				}
-				g.buf.WriteString(" ")
+			g.buf.WriteString("\"")
+			fLen := len(tag.Fields)
+			var i int
+			//保证顺序输出
+			var keys []string
+			for k := range tag.Fields {
+				keys = append(keys, k)
 			}
+			sort.Strings(keys)
+			for _, key := range keys {
+				g.buf.WriteString(key)
+				if tag.Fields[key] != "" {
+					g.buf.WriteString(":")
+					g.buf.WriteString(tag.Fields[key])
+				}
+				if i < fLen-1 {
+					g.buf.WriteString(";")
+				}
+				i++
+			}
+			g.buf.WriteString("\"")
+			g.buf.WriteString(" ")
 		}
 		g.buf.WriteString("`")
 	}

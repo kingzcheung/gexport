@@ -2,7 +2,6 @@ package types
 
 import (
 	"bytes"
-	"fmt"
 	"strings"
 )
 
@@ -39,7 +38,6 @@ const (
 )
 
 func GoType(fieldType string) string {
-	fmt.Println(fieldType)
 	var goT bytes.Buffer
 
 	ft := strings.Split(fieldType, " ")

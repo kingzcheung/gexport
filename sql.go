@@ -9,7 +9,12 @@ import (
 )
 
 type Sql struct {
-	parser *parser.Parser
+	parser     *parser.Parser
+	structName string
+}
+
+func (s *Sql) SetStructName(structName string) {
+	s.structName = structName
 }
 
 func NewSql() *Sql {
@@ -38,7 +43,12 @@ func (s *Sql) parseCreateSql(stmts []ast.StmtNode) ([]string, error) {
 		if !ok {
 			return nil, fmt.Errorf("SQL 错误")
 		}
-		gs := NewGoStruct(sc.Table.Name.String())
+		var name = sc.Table.Name.String()
+
+		if s.structName != "" {
+			name = s.structName
+		}
+		gs := NewGoStruct(name)
 		gs.Start()
 		for _, col := range sc.Cols {
 			var (
@@ -51,6 +61,14 @@ func (s *Sql) parseCreateSql(stmts []ast.StmtNode) ([]string, error) {
 			//添加form标签
 			tags = append(tags, CreateFormTag(fieldName))
 
+			//gorm tag
+			tags = append(tags, Tag{
+				Name: "gorm",
+				Fields: map[string]string{
+					"column": fieldName,
+					"type":   col.Tp.String(),
+				},
+			})
 			gs.Field(col.Name.String(), types.GoType(col.Tp.InfoSchemaStr()), tags...)
 		}
 		gs.End()
