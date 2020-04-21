@@ -29,10 +29,10 @@ func (s *Sql) Parse(sql string) ([]string, error) {
 
 	var res []string
 
-	if strings.HasPrefix(strings.ToLower(sql), "create") {
-		res, err = s.parseCreateSql(stmts)
+	if !strings.HasPrefix(strings.ToLower(sql), "create") {
+		return res, fmt.Errorf("")
 	}
-
+	res, err = s.parseCreateSql(stmts)
 	return res, err
 }
 

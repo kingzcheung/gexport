@@ -34,18 +34,18 @@ func rootRun(cmd *cobra.Command, args []string) {
 	}
 
 	gx := gexport.New(buf.String(), exportType(buf.Bytes()))
-	//设置名称
+	//Set the structure name
 	gx.StructName = name
 	gx.Parse()
 	if gx.Error() != nil {
-		log.Fatalln("数据解析错误！")
+		log.Fatalln("Data parsing error!")
 	}
 
 	output := gx.Output()
 
 	for _, g := range output {
 		if outfile != "" {
-			//写入文件
+			//Write to file
 			if err := writeFile(outfile, g); err != nil {
 				log.Fatalln(err)
 			}

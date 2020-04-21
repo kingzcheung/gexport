@@ -1,5 +1,7 @@
 package gexport
 
+import "fmt"
+
 type ExportType string
 
 const (
@@ -8,9 +10,9 @@ const (
 )
 
 type Gexport struct {
-	//原始字符串，可以是json或者sql
+	//The original string can be json or sql
 	raw string
-	//解析器，来自 https://github.com/pingcap/parser
+	//Parser from https://github.com/pingcap/parser
 	parser     StructParser
 	output     []string
 	err        error
@@ -46,7 +48,9 @@ func (g *Gexport) newParser(t ExportType) {
 func (g *Gexport) Parse() *Gexport {
 	g.parser.SetStructName(g.StructName)
 	g.output, g.err = g.parser.Parse(g.raw)
-
+	if len(g.output) == 0 {
+		g.err = fmt.Errorf("data cannot be parsed")
+	}
 	return g
 }
 

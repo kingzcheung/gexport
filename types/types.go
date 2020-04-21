@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	//数值类型
+	//Numeric
 	TINYINT   = "TINYINT"
 	SMALLINT  = "SMALLINT"
 	MEDIUMINT = "MEDIUMINT"
@@ -17,14 +17,14 @@ const (
 	DOUBLE    = "DOUBLE"
 	DECIMAL   = "DECIMAL"
 
-	//日期和时间类型
+	//Date and Time
 	DATE      = "DATE"
 	TIME      = "TIME"
 	YEAR      = "YEAR"
 	DATETIME  = "DATETIME"
 	TIMESTAMP = "TIMESTAMP"
 
-	//字符串类型
+	//String
 	CHAR       = "CHAR"
 	VARCHAR    = "VARCHAR"
 	TINYBLOB   = "TINYBLOB"

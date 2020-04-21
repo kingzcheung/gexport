@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//NameCamelCase 转换为驼峰命名
+//NameCamelCase Converted to camelCase
 func NameCamelCase(str string) string {
 	var buf bytes.Buffer
 	strSlices := strings.Split(str, "_")
@@ -18,7 +18,7 @@ func NameCamelCase(str string) string {
 	return buf.String()
 }
 
-//Capitalize 首字符大写
+//Capitalize Capitalize the first character
 func Capitalize(str string) string {
 	if len(str) < 1 {
 		return ""

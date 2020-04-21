@@ -65,7 +65,9 @@ func (j *Json) dimensionalReduction(raw jsonRes, key string) {
 			if !ok {
 				continue
 			}
-
+			if len(val) == 0 {
+				continue
+			}
 			first := val[0]
 
 			subRaw := first.(map[string]interface{})

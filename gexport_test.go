@@ -31,3 +31,39 @@ func TestGexport_Parse(t *testing.T) {
 
 	as.Equal(r.Error() != nil, true)
 }
+
+func TestGexport_Parse_Json(t *testing.T) {
+	ts := []testCase{
+		{`{"bar":12}`, false, ""},
+		{`{"bar":foo}`, true, ""},
+		{`[{"bar":foo]`, true, ""},
+		{`[{"bar":foo}]`, true, ""},
+		{`[{"bar":"foo"}]`, true, ""},
+		{`[{"bar":"foo"}]`, true, ""},
+		{`{"isLike":false,"likesCount":0,"likesGroup":[]}`, false, ""},
+	}
+	as := assert.New(t)
+	for _, j := range ts {
+		r := New(j.src, "json")
+		r.StructName = "ab"
+		r.Parse()
+		fmt.Println(r.Output())
+		as.Equal(r.Error() != nil, j.ok)
+	}
+}
+
+func TestGexport_Parse_Sql(t *testing.T) {
+	ts := []testCase{
+		{`select 1`, true, ""},
+		{`update t set name=123 where id=3`, true, ""},
+		{`create table test (id int(10) not null ,name varchar(10) not null)`, false, ""},
+		{`create table test`, false, ""},
+	}
+	as := assert.New(t)
+	for _, j := range ts {
+		r := New(j.src, "sql")
+		r.StructName = "ab"
+		r.Parse()
+		as.Equal(len(r.Output()) == 0, j.ok)
+	}
+}
