@@ -21,12 +21,12 @@ func example() {
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品物流，事件记录表';`
 
-	gx := gexport.New(sql, "sql")
+	gx := gexport.New(sql, gexport.SQL)
 
 	fmt.Println(gx.Parse().Output())
 }
 
 func main() {
 	example()
-	json_example()
+	// json_example()
 }

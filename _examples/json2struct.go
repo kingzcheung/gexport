@@ -13,6 +13,6 @@ func json_example() {
         "age": 12
     }
 }`
-	gx := gexport.New(json, "json")
+	gx := gexport.New(json, gexport.JSON)
 	fmt.Println(gx.Parse().Output())
 }

@@ -13,7 +13,7 @@ type testCase struct {
 
 func TestSql_Parse(t *testing.T) {
 	as := assert.New(t)
-	//sql := `CREATE TABLE test (id int(11) NOT NULL AUTO_INCREMENT COMMENT '编号ID')`
+	// sql := `CREATE TABLE test (id int(11) NOT NULL AUTO_INCREMENT COMMENT '编号ID')`
 
 	data := []testCase{
 		{`create table a (id int(11) not null COMMENT '编号ID')`, true, "type A struct {\n\tId int `json:\"id\" form:\"id\" gorm:\"column:id;type:int(11)\" `\n}"},
