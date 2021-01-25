@@ -3,13 +3,10 @@ package gexport
 import (
 	"fmt"
 	"github.com/kingzcheung/gexport/types"
-	"github.com/pingcap/parser"
-	"github.com/pingcap/parser/ast"
-	"strings"
+	"github.com/xwb1989/sqlparser"
 )
 
 type Sql struct {
-	parser     *parser.Parser
 	structName string
 }
 
@@ -18,61 +15,66 @@ func (s *Sql) SetStructName(structName string) {
 }
 
 func NewSql() *Sql {
-	return &Sql{parser: parser.New()}
+	return &Sql{}
 }
 
 func (s *Sql) Parse(sql string) ([]string, error) {
-	stmts, _, err := s.parser.Parse(sql, "", "")
+	stmt, err := sqlparser.Parse(sql)
 	if err != nil {
 		return nil, err
 	}
-
-	var res []string
-
-	if !strings.HasPrefix(strings.ToLower(sql), "create") {
-		return res, fmt.Errorf("")
+	createStmt, ok := stmt.(*sqlparser.DDL)
+	if !ok {
+		return nil, fmt.Errorf("sql error")
 	}
-	res, err = s.parseCreateSql(stmts)
-	return res, err
+	res, err := s.parseCreateSql(createStmt)
+	return []string{res}, err
 }
 
-func (s *Sql) parseCreateSql(stmts []ast.StmtNode) ([]string, error) {
-	var structRes []string
-	for _, stmt := range stmts {
-		sc, ok := stmt.(*ast.CreateTableStmt)
-		if !ok {
-			return nil, fmt.Errorf("SQL 错误")
-		}
-		var name = sc.Table.Name.String()
+func (s *Sql) parseCreateSql(stmt *sqlparser.DDL) (string, error) {
 
-		if s.structName != "" {
-			name = s.structName
-		}
-		gs := NewGoStruct(name)
-		gs.Start()
-		for _, col := range sc.Cols {
-			var (
-				tags      []Tag
-				fieldName string
-			)
-			fieldName = col.Name.String()
-			//添加json标签
-			tags = append(tags, CreateJsonTag(fieldName))
-			//添加form标签
-			tags = append(tags, CreateFormTag(fieldName))
+	var name = stmt.NewName.Name.String()
 
-			//gorm tag
-			tags = append(tags, Tag{
-				Name: "gorm",
-				Fields: map[string]string{
-					"column": fieldName,
-					"type":   col.Tp.String(),
-				},
-			})
-			gs.Field(col.Name.String(), types.GoType(col.Tp.InfoSchemaStr()), tags...)
-		}
-		gs.End()
-		structRes = append(structRes, gs.String())
+	if s.structName != "" {
+		name = s.structName
 	}
-	return structRes, nil
+	gs := NewGoStruct(name)
+	gs.Start()
+	for _, col := range stmt.TableSpec.Columns {
+		var (
+			tags      []Tag
+			fieldName string
+		)
+		fieldName = col.Name.String()
+		// 添加json标签
+		tags = append(tags, CreateJsonTag(fieldName))
+		// 添加form标签
+		tags = append(tags, CreateFormTag(fieldName))
+
+		// gorm tag
+		field := map[string]string{
+			"column": fieldName,
+			"type":   reformatType(col.Type.Type, col.Type.Length),
+		}
+		if col.Type.Autoincrement {
+			field["autoIncrement"] = ""
+		}
+
+		tags = append(tags, Tag{
+			Name:  "gorm",
+			Field: field,
+		})
+
+		gs.Field(col.Name.String(), types.GoType(col.Type.Type), tags...)
+	}
+	gs.End()
+	gs.WithTableFunc()
+	return gs.String(), nil
+}
+
+func reformatType(t string, v *sqlparser.SQLVal) string {
+	if t == "varchar" {
+		return fmt.Sprintf("%s(%s)", t, string(v.Val))
+	}
+	return t
 }

@@ -9,7 +9,6 @@ package main
 
 import (
 	"github.com/kingzcheung/gexport/cmd"
-	_ "github.com/kingzcheung/gexport/driver"
 )
 
 func main() {

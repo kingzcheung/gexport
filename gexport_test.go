@@ -2,7 +2,6 @@ package gexport
 
 import (
 	"fmt"
-	_ "github.com/kingzcheung/gexport/driver"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

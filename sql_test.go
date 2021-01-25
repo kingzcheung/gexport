@@ -27,7 +27,7 @@ func TestSql_Parse(t *testing.T) {
 		if err != nil {
 			as.Error(err)
 		}
-		as.Equal(p[0], testC.out)
+		as.Equal(p, testC.out)
 	}
 
 }

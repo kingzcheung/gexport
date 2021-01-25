@@ -54,14 +54,6 @@ gexport --name='User' <data.sql #通过--name 自定义struct name
 
 #### 作为类库使用:
 
-首先要导入驱动
-```go
-import (
- _ "github.com/kingzcheung/gexport/driver"
-)
-
-```
-
 ```go
 sql := `CREATE TABLE gd_goods_record (
   id int(10) unsigned NOT NULL AUTO_INCREMENT,

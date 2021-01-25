@@ -34,7 +34,7 @@ func rootRun(cmd *cobra.Command, args []string) {
 	}
 
 	gx := gexport.New(buf.String(), exportType(buf.Bytes()))
-	//Set the structure name
+	// Set the structure name
 	gx.StructName = name
 	gx.Parse()
 	if gx.Error() != nil {
@@ -45,7 +45,7 @@ func rootRun(cmd *cobra.Command, args []string) {
 
 	for _, g := range output {
 		if outfile != "" {
-			//Write to file
+			// Write to file
 			if err := writeFile(outfile, g); err != nil {
 				log.Fatalln(err)
 			}

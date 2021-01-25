@@ -10,9 +10,9 @@ const (
 )
 
 type Gexport struct {
-	//The original string can be json or sql
+	// The original string can be json or sql
 	raw string
-	//Parser from https://github.com/pingcap/parser
+	// Parser from https://github.com/pingcap/parser
 	parser     StructParser
 	output     []string
 	err        error

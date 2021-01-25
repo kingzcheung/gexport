@@ -9,27 +9,42 @@ import (
 var DefaultStructName = "RootGeneratedName"
 
 type GoStruct struct {
-	Name string
-	buf  bytes.Buffer
-	//是否内联
+	Name    string
+	rawName string
+	buf     bytes.Buffer
+	// 是否内联
 	IsInline bool
 }
 
 func NewGoStruct(name ...string) *GoStruct {
-	var n string
+	var gs = new(GoStruct)
 	if len(name) > 0 {
-		n = NameCamelCase(name[0])
+		gs.Name = NameCamelCase(name[0])
+		gs.rawName = name[0]
 	} else {
-		n = DefaultStructName
+		gs.Name = DefaultStructName
 	}
-	return &GoStruct{Name: n}
+	return gs
 }
 
 func (g *GoStruct) Start() {
 	g.buf.WriteString("struct {\n")
 }
 
-//Field return struct field.
+func (g *GoStruct) WithTableFunc() {
+	if g.rawName == "" {
+		return
+	}
+
+	g.buf.WriteString(`func (`)
+	g.buf.WriteString(g.Name)
+	g.buf.WriteString(") TableName() string {\n")
+	g.buf.WriteString(`return "`)
+	g.buf.WriteString(g.rawName)
+	g.buf.WriteString("\"\n}")
+}
+
+// Field return struct field.
 func (g *GoStruct) Field(name string, fileType string, tags ...Tag) {
 	g.buf.WriteString("\t")
 	g.buf.WriteString(NameCamelCase(name))
@@ -37,26 +52,26 @@ func (g *GoStruct) Field(name string, fileType string, tags ...Tag) {
 	g.buf.WriteString(fileType)
 	g.buf.WriteString(" ")
 
-	//add tags
+	// add tags
 	if len(tags) > 0 {
 		g.buf.WriteString("`")
 		for _, tag := range tags {
 			g.buf.WriteString(tag.Name)
 			g.buf.WriteString(":")
 			g.buf.WriteString("\"")
-			fLen := len(tag.Fields)
+			fLen := len(tag.Field)
 			var i int
-			//保证顺序输出
+			// 保证顺序输出
 			var keys []string
-			for k := range tag.Fields {
+			for k := range tag.Field {
 				keys = append(keys, k)
 			}
 			sort.Strings(keys)
 			for _, key := range keys {
 				g.buf.WriteString(key)
-				if tag.Fields[key] != "" {
+				if tag.Field[key] != "" {
 					g.buf.WriteString(":")
-					g.buf.WriteString(tag.Fields[key])
+					g.buf.WriteString(tag.Field[key])
 				}
 				if i < fLen-1 {
 					g.buf.WriteString(";")
@@ -73,7 +88,7 @@ func (g *GoStruct) Field(name string, fileType string, tags ...Tag) {
 }
 
 func (g *GoStruct) End() {
-	g.buf.WriteString("}")
+	g.buf.WriteString("}\n")
 }
 
 func (g *GoStruct) TName() string {

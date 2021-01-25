@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/kingzcheung/gexport"
-	_ "github.com/kingzcheung/gexport/driver"
 )
 
 func example() {
