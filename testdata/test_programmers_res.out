@@ -1,5 +1,0 @@
-type DefaultStructName struct {
-	Programmers []struct{
-
-	} `json:"programmers" `
-}
