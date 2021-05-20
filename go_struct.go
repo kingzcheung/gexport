@@ -1,106 +1,41 @@
 package gexport
 
-import (
-	"bytes"
-	"fmt"
-	"sort"
-)
-
-var DefaultStructName = "RootGeneratedName"
-
-type GoStruct struct {
-	Name    string
-	rawName string
-	buf     bytes.Buffer
-	// 是否内联
-	IsInline bool
+type Tag struct {
+	TagName  string
+	TagValue map[string]string
 }
 
-func NewGoStruct(name ...string) *GoStruct {
-	var gs = new(GoStruct)
-	if len(name) > 0 {
-		gs.Name = NameCamelCase(name[0])
-		gs.rawName = name[0]
-	} else {
-		gs.Name = DefaultStructName
-	}
-	return gs
+type Struct struct {
+	StructName string
+	Fields     []*StructField
 }
 
-func (g *GoStruct) Start() {
-	g.buf.WriteString("struct {\n")
+type FieldName string
+
+type FieldType string
+
+type StructField struct {
+	FieldName  string // 字段名
+	FieldType  string // 字段类型
+	Tags       []*Tag //字段标签
+	Annotation string //字段注释
 }
 
-func (g *GoStruct) WithTableFunc() {
-	if g.rawName == "" {
-		return
-	}
-
-	g.buf.WriteString(`func (`)
-	g.buf.WriteString(g.Name)
-	g.buf.WriteString(") TableName() string {\n")
-	g.buf.WriteString(`return "`)
-	g.buf.WriteString(g.rawName)
-	g.buf.WriteString("\"\n}")
-}
-
-// Field return struct field.
-func (g *GoStruct) Field(name string, fileType string, tags ...Tag) {
-	g.buf.WriteString("\t")
-	g.buf.WriteString(NameCamelCase(name))
-	g.buf.WriteString(" ")
-	g.buf.WriteString(fileType)
-	g.buf.WriteString(" ")
-
-	// add tags
-	if len(tags) > 0 {
-		g.buf.WriteString("`")
-		for _, tag := range tags {
-			g.buf.WriteString(tag.Name)
-			g.buf.WriteString(":")
-			g.buf.WriteString("\"")
-			fLen := len(tag.Field)
-			var i int
-			// 保证顺序输出
-			var keys []string
-			for k := range tag.Field {
-				keys = append(keys, k)
-			}
-			sort.Strings(keys)
-			for _, key := range keys {
-				g.buf.WriteString(key)
-				if tag.Field[key] != "" {
-					g.buf.WriteString(":")
-					g.buf.WriteString(tag.Field[key])
-				}
-				if i < fLen-1 {
-					g.buf.WriteString(";")
-				}
-				i++
-			}
-			g.buf.WriteString("\"")
-			g.buf.WriteString(" ")
-		}
-		g.buf.WriteString("`")
-	}
-
-	g.buf.WriteString("\n")
-}
-
-func (g *GoStruct) End() {
-	g.buf.WriteString("}\n")
-}
-
-func (g *GoStruct) TName() string {
-	return fmt.Sprintf("type %s ", g.Name)
-}
-func TName(name string) string {
-	return fmt.Sprintf("type %s ", name)
-}
-func (g *GoStruct) String() string {
-	return g.TName() + g.buf.String()
-}
-
-func (g *GoStruct) StringNotType() string {
-	return g.buf.String()
-}
+//func (fn FieldName) UpperCamelCase() string {
+//	bs := []byte(fn)
+//	for i, b := range bs {
+//		if i == 0 {
+//			if b >= 97 && b <= 122 {
+//				bs[0] = b-32
+//			}
+//		}
+//		if b == '_' && i < len(bs) - 1 {
+//			// 小写变大写
+//			bs[i+1] = bs[i+1] - 32
+//
+//			// 删除下划线 _
+//			bs = append(bs[:i],bs[i+1:]... )
+//		}
+//	}
+//	return string(bs)
+//}

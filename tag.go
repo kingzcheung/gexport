@@ -1,11 +1,5 @@
 package gexport
 
-type Field map[string]string
-type Tag struct {
-	Name string
-	Field
-}
-
 // CreateJsonTag 生成json tag
 func CreateJsonTag(field string) Tag {
 	return CreateFieldTag("json", field)
@@ -22,12 +16,9 @@ func CreateXmlTag(field string) Tag {
 
 // CreateFieldTag 生成特定的字段 tag
 func CreateFieldTag(name string, field string) Tag {
-	var fields = map[string]string{
+	var _ = map[string]string{
 		field: "",
 	}
 
-	return Tag{
-		Name:  name,
-		Field: fields,
-	}
+	return Tag{}
 }

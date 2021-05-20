@@ -2,79 +2,78 @@ package gexport
 
 import (
 	"fmt"
-	"github.com/kingzcheung/gexport/types"
-	"github.com/xwb1989/sqlparser"
+	"github.com/pingcap/parser"
+	"github.com/pingcap/parser/ast"
+	_ "github.com/pingcap/parser/test_driver"
 )
 
-type Sql struct {
+type SqlStruct struct {
 	structName string
+	hasJson    bool
+	hasGorm    bool
+	hasXml     bool
 }
 
-func (s *Sql) SetStructName(structName string) {
-	s.structName = structName
+func NewSql() *SqlStruct {
+	return &SqlStruct{}
 }
 
-func NewSql() *Sql {
-	return &Sql{}
-}
-
-func (s *Sql) Parse(sql string) ([]string, error) {
-	stmt, err := sqlparser.Parse(sql)
+func (s *SqlStruct) Parse(sql string) (*Struct, error) {
+	p := parser.New()
+	stmt, err := p.ParseOneStmt(sql, "", "")
 	if err != nil {
 		return nil, err
 	}
-	createStmt, ok := stmt.(*sqlparser.DDL)
+	ct, ok := stmt.(*ast.CreateTableStmt)
 	if !ok {
-		return nil, fmt.Errorf("sql error")
+		return nil, fmt.Errorf("it is not createtable sql: %v", sql)
 	}
-	res, err := s.parseCreateSql(createStmt)
-	return []string{res}, err
-}
 
-func (s *Sql) parseCreateSql(stmt *sqlparser.DDL) (string, error) {
+	st := new(Struct)
+	st.StructName = ct.Table.Name.String()
+	fmt.Printf("%+v\n", ct.Options[0].StrValue)
+	for _, col := range ct.Cols {
+		sf := new(StructField)
+		sf.FieldName = s.FieldName(col.Name.String())
+		sf.FieldType = s.FieldType(col.Tp.String())
 
-	var name = stmt.NewName.Name.String()
-
-	if s.structName != "" {
-		name = s.structName
-	}
-	gs := NewGoStruct(name)
-	gs.Start()
-	for _, col := range stmt.TableSpec.Columns {
-		var (
-			tags      []Tag
-			fieldName string
-		)
-		fieldName = col.Name.String()
-		// 添加json标签
-		tags = append(tags, CreateJsonTag(fieldName))
-		// 添加form标签
-		tags = append(tags, CreateFormTag(fieldName))
-
-		// gorm tag
-		field := map[string]string{
-			"column": fieldName,
-			"type":   reformatType(col.Type.Type, col.Type.Length),
-		}
-		if col.Type.Autoincrement {
-			field["autoIncrement"] = ""
+		if s.hasJson {
+			sf.Tags = append(sf.Tags, &Tag{
+				TagName: "json",
+				TagValue: map[string]string{
+					col.Name.String(): "",
+				},
+			})
 		}
 
-		tags = append(tags, Tag{
-			Name:  "gorm",
-			Field: field,
-		})
+		if s.hasXml {
+			sf.Tags = append(sf.Tags, &Tag{
+				TagName: "xml",
+				TagValue: map[string]string{
+					col.Name.String(): "",
+				},
+			})
+		}
+		if s.hasGorm {
+			sf.Tags = append(sf.Tags, &Tag{
+				TagName: "gorm",
+				TagValue: map[string]string{
+					"column": col.Name.String(),
+				},
+			})
+		}
 
-		gs.Field(col.Name.String(), types.GoType(col.Type.Type), tags...)
+		//for _, option := range col.Options {
+		//
+		//	fmt.Printf("%+v\n", col)
+		//	if option.Expr != nil {
+		//		fmt.Println(option.Expr.Text())
+		//	}
+		//}
+		st.Fields = append(st.Fields, sf)
 	}
-	gs.End()
-	gs.WithTableFunc()
-	return gs.String(), nil
-}
+	//fmt.Printf("%+v\n",ct.Cols[0])
+	//fmt.Printf("%+v\n",ct.Table.Name.String())
 
-func reformatType(t string, v *sqlparser.SQLVal) string {
-	if t == "varchar" {
-		return fmt.Sprintf("%s(%s)", t, string(v.Val))
-	}
-	return t
+	return st, nil
 }
