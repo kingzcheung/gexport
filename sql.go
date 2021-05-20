@@ -14,6 +14,22 @@ type SqlStruct struct {
 	hasXml     bool
 }
 
+func (s *SqlStruct) SetStructName(structName string) {
+	s.structName = structName
+}
+
+func (s *SqlStruct) SetHasJson(hasJson bool) {
+	s.hasJson = hasJson
+}
+
+func (s *SqlStruct) SetHasGorm(hasGorm bool) {
+	s.hasGorm = hasGorm
+}
+
+func (s *SqlStruct) SetHasXml(hasXml bool) {
+	s.hasXml = hasXml
+}
+
 func NewSql() *SqlStruct {
 	return &SqlStruct{}
 }
@@ -30,8 +46,8 @@ func (s *SqlStruct) Parse(sql string) (*Struct, error) {
 	}
 
 	st := new(Struct)
-	st.StructName = ct.Table.Name.String()
-	fmt.Printf("%+v\n", ct.Options[0].StrValue)
+	st.StructName = s.FieldName(ct.Table.Name.String())
+	//fmt.Printf("%+v\n", ct.Table.Name.String())
 	for _, col := range ct.Cols {
 		sf := new(StructField)
 		sf.FieldName = s.FieldName(col.Name.String())

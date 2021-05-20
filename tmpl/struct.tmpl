@@ -1,0 +1,5 @@
+type {{ .structName }} struct {
+    {{- range .Fields}}
+    {{.FieldName}} {{.FieldType}} `{{range .Tags}}{{.TagName}}:"{{range $key, $value := .TagValue }}{{$key}}{{if $value}}:{{$value}}{{end}}{{end}}" {{ end }}`
+    {{- end }}
+}

@@ -1,7 +1,6 @@
 package gexport
 
 import (
-	"fmt"
 	"github.com/kingzcheung/gexport/testdata"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -13,18 +12,26 @@ type testCase struct {
 	out string
 }
 
-func TestSql_Parse(t *testing.T) {
-	data, _ := testdata.TestData.ReadFile("simple3.sql")
-	ns := NewSql()
-	ns.hasJson = true
-	res, err := ns.Parse(string(data))
-	if err != nil {
-		assert.Error(t, err)
+func TestSqlStruct_Parse(t *testing.T) {
+	type args struct {
+		filename string
+		wantName string
 	}
 
-	for _, field := range res.Fields {
-		fmt.Printf("%+v\n", field)
-
+	files := []args{
+		{"simple1.sql", "User"},
+		{"simple2.sql", "A"},
+		{"simple3.sql", "Tracking"},
+		{"simple4.sql", "AbUser"},
 	}
 
+	for _, file := range files {
+		readFile, err := testdata.TestData.ReadFile(file.filename)
+		assert.NoError(t, err)
+		s := NewSql()
+		parse, err := s.Parse(string(readFile))
+		assert.NoError(t, err)
+		// test struct name
+		assert.Equal(t, file.wantName, parse.StructName)
+	}
 }
