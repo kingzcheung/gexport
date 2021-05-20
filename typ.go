@@ -11,33 +11,38 @@ var typDates = []string{"date", "time", "datetime", "timestamp"}
 
 func (s *SqlStruct) FieldType(in string) string {
 	in = strings.ToLower(in)
+	var out string
 	if strings.HasPrefix(in, "tinyint") {
-		return "int8"
+		out = "int8"
 	}
 	if strings.HasPrefix(in, "smallint") {
-		return "int16"
+		out = "int16"
 	}
 	if strings.HasPrefix(in, "mediumint") {
-		return "int"
+		out = "int"
 	}
 	if strings.HasPrefix(in, "int") {
-		return "int"
+		out = "int"
 	}
 
 	if strings.HasPrefix(in, "bigint") {
-		return "int64"
+		out = "int64"
+	}
+
+	if strings.Index(in, "unsigned") > 0 {
+		out = "u" + out
 	}
 
 	for _, typString := range typStrings {
 		if strings.HasPrefix(in, typString) {
-			return "string"
+			out = "string"
 		}
 	}
 	for _, typDate := range typDates {
 		if strings.HasPrefix(in, typDate) {
-			return "time.Time"
+			out = "time.Time"
 		}
 	}
 
-	return "string"
+	return out
 }

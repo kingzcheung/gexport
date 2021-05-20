@@ -52,6 +52,7 @@ func (s *SqlStruct) Parse(sql string) (*Struct, error) {
 		sf := new(StructField)
 		sf.FieldName = s.FieldName(col.Name.String())
 		sf.FieldType = s.FieldType(col.Tp.String())
+		//fmt.Printf("%+v\n", col.Tp)
 
 		if s.hasJson {
 			sf.Tags = append(sf.Tags, &Tag{
@@ -81,7 +82,7 @@ func (s *SqlStruct) Parse(sql string) (*Struct, error) {
 
 		//for _, option := range col.Options {
 		//
-		//	fmt.Printf("%+v\n", col)
+		//	fmt.Printf("%+v\n", option)
 		//	if option.Expr != nil {
 		//		fmt.Println(option.Expr.Text())
 		//	}

@@ -12,6 +12,13 @@ type testCase struct {
 	out string
 }
 
+func TestSqlStruct_Parse2(t *testing.T) {
+	readFile, err := testdata.TestData.ReadFile("simple1.sql")
+	assert.NoError(t, err)
+	s := NewSql()
+	_, _ = s.Parse(string(readFile))
+}
+
 func TestSqlStruct_Parse(t *testing.T) {
 	type args struct {
 		filename string

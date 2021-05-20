@@ -36,7 +36,7 @@ func TestGExport_Export(t *testing.T) {
 	//		}
 	//	})
 	//}
-	data, _ := testdata.TestData.ReadFile("simple3.sql")
+	data, _ := testdata.TestData.ReadFile("simple1.sql")
 	ge := New(string(data), SQL)
 
 	_, err := ge.Export()
