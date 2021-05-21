@@ -37,9 +37,9 @@ func TestGExport_Export(t *testing.T) {
 	//	})
 	//}
 	data, _ := testdata.TestData.ReadFile("simple1.sql")
-	ge := New(string(data), SQL)
+	ge := New(SQL)
 
-	_, err := ge.Export()
+	_, err := ge.Export(string(data))
 	assert.NoError(t, err)
 	if err != nil {
 

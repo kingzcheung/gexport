@@ -47,7 +47,6 @@ func (s *SqlStruct) Parse(sql string) (*Struct, error) {
 
 	st := new(Struct)
 	st.StructName = s.FieldName(ct.Table.Name.String())
-	//fmt.Printf("%+v\n", ct.Table.Name.String())
 	for _, col := range ct.Cols {
 		sf := new(StructField)
 		sf.FieldName = s.FieldName(col.Name.String())

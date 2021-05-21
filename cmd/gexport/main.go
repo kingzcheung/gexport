@@ -8,10 +8,19 @@
 package main
 
 import (
-	"github.com/kingzcheung/gexport/cmd"
+	"context"
+	"github.com/alexedwards/scs/v2"
+	"github.com/kingzcheung/gexport/internal"
+	"log"
+	"time"
 )
 
 func main() {
 
-	cmd.Execute()
+	session := scs.New()
+	session.Lifetime = 24 * time.Hour
+
+	serve := internal.NewServer(session)
+	ctx := context.Background()
+	log.Fatalln(serve.ListenAndServe(ctx, ":5210"))
 }

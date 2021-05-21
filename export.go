@@ -16,12 +16,10 @@ const (
 
 type GExport struct {
 	parse Parser
-	sql   string
 }
 
-func New(sql string, typ Typ) *GExport {
+func New(typ Typ) *GExport {
 	ge := new(GExport)
-	ge.sql = sql
 	switch typ {
 	case SQL:
 		s := NewSql()
@@ -36,9 +34,9 @@ func New(sql string, typ Typ) *GExport {
 	return ge
 }
 
-func (e *GExport) Export() ([]byte, error) {
+func (e *GExport) Export(sql string) ([]byte, error) {
 
-	parse, err := e.parse.Parse(e.sql)
+	parse, err := e.parse.Parse(sql)
 	if err != nil {
 		return nil, err
 	}
@@ -59,5 +57,5 @@ func (e *GExport) Export() ([]byte, error) {
 	}
 	fmt.Println(bf.String())
 
-	return nil, nil
+	return bf.Bytes(), nil
 }
