@@ -1,7 +1,7 @@
 <template>
     <div class="container mx-auto mb-5">
         <div class="shadow sm:rounded-md sm:overflow-hidden mb-5">
-            <div class="grid grid-cols-3 gap-4 px-4 py-5 bg-white sm:p-6">
+            <div class="grid grid-cols-3 gap-4 px-4 py-5 bg-white dark:bg-base-200 sm:p-6">
                 <div class="form-control mt-0">
                     <label class="label">
                         <span class="label-text">数据库域名</span>
@@ -49,16 +49,16 @@
                 </div>
             </div>
 
-            <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+            <div class="px-4 py-3 bg-gray-50 dark:bg-base-100 text-right sm:px-6">
                 <button class="btn btn-primary" @click="connHandle">连接数据库</button>
             </div>
         </div>
         <div class="shadow sm:rounded-md sm:overflow-hidden mb-5" v-if="tables.length > 0">
-            <div class="px-4 py-5 bg-white sm:p-6">
+            <div class="px-4 py-5 bg-white dark:bg-base-200 sm:p-6">
             <ul class="accordion accordion-arrow" >
                 <li class="accordion-item mb-3" v-for="(table,i) of tables" key="table.name">
                     <input v-model="tables[i].status" @click="toggleStatus(i)" :id="`item-793472${i}`" type="checkbox">
-                    <label :for="`item-793472${i}`" class="text-xl font-medium accordion-title">
+                    <label :for="`item-793472${i}`" class="text-xl dark:text-white font-medium accordion-title">
                         {{ table.name }}
                     </label>
                     <div class="accordion-body">
