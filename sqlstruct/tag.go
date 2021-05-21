@@ -1,4 +1,4 @@
-package gexport
+package sqlstruct
 
 // CreateJsonTag 生成json tag
 func CreateJsonTag(field string) Tag {

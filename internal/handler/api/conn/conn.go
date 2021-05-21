@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-chi/chi/v5"
-	"github.com/kingzcheung/gexport"
 	"github.com/kingzcheung/gexport/internal/core"
+	"github.com/kingzcheung/gexport/sqlstruct"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"io"
@@ -32,7 +32,7 @@ func TableDetailCtx() http.HandlerFunc {
 		}
 		data := core.ShowCreateTable(db.WithContext(r.Context()), name)
 
-		ge := gexport.New(gexport.SQL)
+		ge := sqlstruct.New(sqlstruct.SQL)
 
 		export, err := ge.Export(data.CreateTable)
 		if err != nil {

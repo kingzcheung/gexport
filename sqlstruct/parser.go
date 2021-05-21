@@ -1,4 +1,4 @@
-package gexport
+package sqlstruct
 
 type Parser interface {
 	// Parse the input data and return the structure list

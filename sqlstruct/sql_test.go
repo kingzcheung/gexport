@@ -1,4 +1,4 @@
-package gexport
+package sqlstruct
 
 import (
 	"github.com/kingzcheung/gexport/testdata"

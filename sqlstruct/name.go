@@ -1,4 +1,4 @@
-package gexport
+package sqlstruct
 
 type FieldNamer interface {
 	FieldName(in string) string

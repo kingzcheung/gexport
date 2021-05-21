@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/kingzcheung/gexport"
+	"github.com/kingzcheung/gexport/sqlstruct"
 )
 
 func example() {
@@ -20,7 +20,7 @@ func example() {
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品物流，事件记录表';`
 
-	gx := gexport.New(gexport.SQL)
+	gx := sqlstruct.New(sqlstruct.SQL)
 
 	fmt.Println(gx.Export(sql))
 }

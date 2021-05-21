@@ -6,7 +6,7 @@
                     <label class="label">
                         <span class="label-text">数据库域名</span>
                     </label>
-                    <input type="text" v-model="host" placeholder="127.0.0.1" class="input input-info input-bordered">
+                    <input type="text" v-model="host" placeholder="127.0.0.1" class="input input-info dark:text-white input-bordered">
                     <label class="label">
                         <span class="label-text-alt">Please enter data</span>
                     </label>
@@ -15,7 +15,7 @@
                     <label class="label">
                         <span class="label-text">数据库端口</span>
                     </label>
-                    <input type="text" v-model="port" placeholder="3306" class="input input-info input-bordered">
+                    <input type="text" v-model="port" placeholder="3306" class="input input-info dark:text-white input-bordered">
                     <label class="label">
                         <span class="label-text-alt">Please enter port</span>
                     </label>
@@ -24,7 +24,7 @@
                     <label class="label">
                         <span class="label-text">数据库名称</span>
                     </label>
-                    <input type="text" v-model="dbname" placeholder="" class="input input-info input-bordered">
+                    <input type="text" v-model="dbname" placeholder="" class="input input-info dark:text-white input-bordered">
                     <label class="label">
                         <span class="label-text-alt">Please enter data</span>
                     </label>
@@ -33,7 +33,7 @@
                     <label class="label">
                         <span class="label-text">数据库用户名</span>
                     </label>
-                    <input type="text" v-model="username" placeholder="username" class="input input-info input-bordered">
+                    <input type="text" v-model="username" placeholder="username" class="input input-info dark:text-white input-bordered">
                     <label class="label">
                         <span class="label-text-alt">Please enter data</span>
                     </label>
@@ -42,7 +42,7 @@
                     <label class="label">
                         <span class="label-text">数据库密码</span>
                     </label>
-                    <input type="password" v-model="password" placeholder="password" class="input input-info input-bordered">
+                    <input type="password" v-model="password" placeholder="password" class="input input-info dark:text-white input-bordered">
                     <label class="label">
                         <span class="label-text-alt">Please enter data</span>
                     </label>
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="shadow sm:rounded-md sm:overflow-hidden mb-5" v-if="tables.length > 0">
-            <div class="px-4 py-5 bg-white dark:bg-base-200 sm:p-6">
+            <div class="px-4 py-5 bg-white dark:bg-base-100 sm:p-6">
             <ul class="accordion accordion-arrow" >
                 <li class="accordion-item mb-3" v-for="(table,i) of tables" key="table.name">
                     <input v-model="tables[i].status" @click="toggleStatus(i)" :id="`item-793472${i}`" type="checkbox">

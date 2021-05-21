@@ -1,4 +1,4 @@
-package gexport
+package sqlstruct
 
 type Tag struct {
 	TagName  string

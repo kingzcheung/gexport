@@ -1,4 +1,4 @@
-package gexport
+package sqlstruct
 
 import "testing"
 
