@@ -2,7 +2,6 @@ package gexport
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/kingzcheung/gexport/tmpl"
 	"text/template"
 )
@@ -55,7 +54,7 @@ func (e *GExport) Export(sql string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(bf.String())
+	//fmt.Println(bf.String())
 
 	return bf.Bytes(), nil
 }

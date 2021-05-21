@@ -7,8 +7,6 @@ import (
 	"github.com/kingzcheung/gexport/internal/static"
 	"github.com/sirupsen/logrus"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 	"path"
 	"strings"
 )
@@ -46,13 +44,13 @@ func handlerIndex() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		// 开发的反向代理
-		if true {
-			frontEndUrl := "http://127.0.0.1:3000"
-			remote, _ := url.Parse(frontEndUrl)
-			proxy := httputil.NewSingleHostReverseProxy(remote)
-			proxy.ServeHTTP(w, r)
-			return
-		}
+		//if false {
+		//	frontEndUrl := "http://127.0.0.1:3000"
+		//	remote, _ := url.Parse(frontEndUrl)
+		//	proxy := httputil.NewSingleHostReverseProxy(remote)
+		//	proxy.ServeHTTP(w, r)
+		//	return
+		//}
 
 		//w.Header().Set("Content-Type", "text/html; charset=UTF-8")
 		uri := r.URL.Path
